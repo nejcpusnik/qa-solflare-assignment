@@ -1,3 +1,5 @@
+import logger from './test/utils/logger.js';
+
 export const config: WebdriverIO.Config = {
   runner: 'local',
   specs: ['./test/specs/**/*.ts'],
@@ -14,5 +16,17 @@ export const config: WebdriverIO.Config = {
   reporters: ['spec'],
   mochaOpts: {
     timeout: 120_000,
+  },
+
+  beforeTest: function (test) {
+    logger.info(`START: ${test.parent} - ${test.title}`);
+  },
+
+  afterTest: async function (test, _context, { passed, error }) {
+    if (passed) {
+      logger.info(`PASSED: ${test.title}`);
+      return;
+    }
+    logger.error(`FAILED: ${test.title} - ${error?.message ?? 'unknown error'}`);
   },
 };
