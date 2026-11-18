@@ -1,13 +1,30 @@
+import { parseArgs } from 'node:util';
+import { buildCapability } from './config/capabilities.js';
 import logger from './test/utils/logger.js';
 import { saveFailureScreenshot } from './test/utils/screenshot.js';
+
+// Run options from the command line, e.g.:
+//   npx wdio run ./wdio.conf.ts --browser firefox --headless
+//   npx wdio run ./wdio.conf.ts --browser chrome,firefox
+// "strict: false" lets WebdriverIO's own arguments (such as "run" or "--spec") pass through.
+const { values: cliOptions } = parseArgs({
+  options: {
+    browser: { type: 'string', default: 'chrome' },
+    headless: { type: 'boolean', default: false },
+  },
+  strict: false,
+});
+const browserNames = String(cliOptions.browser).toLowerCase().split(',');
+const headless = cliOptions.headless === true;
 
 export const config: WebdriverIO.Config = {
   runner: 'local',
   specs: ['./test/specs/**/*.ts'],
 
+  // One capability per requested browser, so the same test runs on each of them.
   // Browser drivers are downloaded automatically by WebdriverIO,
   // so nothing has to be installed on the machine except Node.js and the browser.
-  capabilities: [{ browserName: 'chrome' }],
+  capabilities: browserNames.map((browserName) => buildCapability(browserName, headless)),
 
   baseUrl: 'https://solflare.com',
   logLevel: 'warn',
