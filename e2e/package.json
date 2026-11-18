@@ -6,7 +6,7 @@
   "description": "Task 1 - end-to-end test for Solflare wallet management (WebdriverIO)",
   "scripts": {
     "test": "wdio run ./wdio.conf.ts",
-    "test:headless": "wdio run ./wdio.conf.ts --headless",
+    "test:headless": "wdio run ./wdio.conf.ts --browser firefox --headless",
     "test:firefox": "wdio run ./wdio.conf.ts --browser firefox",
     "test:all": "wdio run ./wdio.conf.ts --browser chrome,firefox",
     "typecheck": "tsc --noEmit"

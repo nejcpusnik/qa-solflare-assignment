@@ -38,6 +38,16 @@ class OnboardingPage extends Page {
 
   async open(): Promise<void> {
     await this.openPath('/onboard');
+
+    // solflare.com answers some automated browsers (headless Chrome at the time of writing)
+    // with a bare "Too many requests." page. Fail with a clear reason instead of a selector timeout.
+    const pageText = await $('body').getText();
+    if (pageText.includes('Too many requests')) {
+      throw new Error(
+        'solflare.com refused this browser with "Too many requests." ' +
+          'The site rejects headless Chrome; run headed Chrome or Firefox (headed or headless) instead.',
+      );
+    }
   }
 
   /**
