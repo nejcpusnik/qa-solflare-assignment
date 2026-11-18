@@ -1,4 +1,5 @@
 import logger from './test/utils/logger.js';
+import { saveFailureScreenshot } from './test/utils/screenshot.js';
 
 export const config: WebdriverIO.Config = {
   runner: 'local',
@@ -22,11 +23,13 @@ export const config: WebdriverIO.Config = {
     logger.info(`START: ${test.parent} - ${test.title}`);
   },
 
+  // Generic failure handling: every failed test gets a screenshot, whatever the spec.
   afterTest: async function (test, _context, { passed, error }) {
     if (passed) {
       logger.info(`PASSED: ${test.title}`);
       return;
     }
     logger.error(`FAILED: ${test.title} - ${error?.message ?? 'unknown error'}`);
+    await saveFailureScreenshot(test.title);
   },
 };

@@ -1,4 +1,5 @@
 node_modules/
 # WebdriverIO output
 e2e/logs/
+e2e/screenshots/
 .DS_Store
