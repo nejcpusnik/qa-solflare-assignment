@@ -21,6 +21,9 @@
     "webdriverio": "^9.0.0",
     "winston": "^3.17.0"
   },
+  "overrides": {
+    "yauzl": "^3.2.0"
+  },
   "engines": {
     "node": ">=20"
   }
